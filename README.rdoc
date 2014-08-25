@@ -1,28 +1,46 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Currently having problems setting up the Has_and_belongs_to_many relationship between The Class Project and the
+table Employees.
 
-Things you may want to cover:
+When trying to access the employee who is linked to the Project i am receiving the following error:
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+irb(main):015:0> Project.first.employee
+  Project Load (0.5ms)  SELECT  `projects`.* FROM `projects`   ORDER BY `projects`.`id` ASC LIMIT 1
+NoMethodError: undefined method `employee' for #<Project:0x007f8aabc3cf98>
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/activemodel-4.1.4/lib/active_model/attribute_methods.rb:435:in `method_missing'
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/activerecord-4.1.4/lib/active_record/attribute_methods.rb:208:in `method_missing'
+	from (irb):15
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/railties-4.1.4/lib/rails/commands/console.rb:90:in `start'
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/railties-4.1.4/lib/rails/commands/console.rb:9:in `start'
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/railties-4.1.4/lib/rails/commands/commands_tasks.rb:69:in `console'
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/railties-4.1.4/lib/rails/commands/commands_tasks.rb:40:in `run_command!'
+	from /Users/Gary/.rbenv/versions/2.1.2/lib/ruby/gems/2.1.0/gems/railties-4.1.4/lib/rails/commands.rb:17:in `<top (required)>'
+	from bin/rails:4:in `require'
+	from bin/rails:4:in `<main>'
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+My Project Class is Set up as following:
+
+class Project < ActiveRecord::Base
+	belongs_to :customer
+	has_and_belongs_to_many :employees, :join_table => "employees_projects"
+end
+
+My Employee_projects migration is set up as following:
+
+class EmployeesProjects < ActiveRecord::Migration
+  def change
+  	    create_table :employees_projects do |t|
+  	    	t.belongs_to :employee, :project
+  	    	t.timestamps
+  	    end
+  end
+end
+
+
+All migrations have been run.
+
+Anyones help would be greatly appreciated.
+Thanks 
+
